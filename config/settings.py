@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "apps.projects",
     "apps.tasks",
     "drf_spectacular",
+    "django_filters",
 ]
 
 REST_FRAMEWORK = {
@@ -55,6 +56,8 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.SessionAuthentication",
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ],
+    "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
+    "PAGE_SIZE": 10,
 }
 
 SIMPLE_JWT = {

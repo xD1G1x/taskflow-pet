@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Task, Comment
+from datetime import date
 
 
 class TaskSerializer(serializers.ModelSerializer):
@@ -29,6 +30,11 @@ class TaskSerializer(serializers.ModelSerializer):
                         "Assignee can only change task status"
                     )
         return attrs
+    
+    def validate_due_date(self, value):
+        if self.instance is None and value and value < date.today():
+            raise serializers.ValidationError("Due date cannot be in the past")
+        return value
 
 
 class CommentSerializer(serializers.ModelSerializer):
