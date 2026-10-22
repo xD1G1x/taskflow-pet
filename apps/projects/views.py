@@ -5,9 +5,11 @@ from .models import Project
 from .serializers import ProjectSerializer
 
 class ProjectViewSet(viewsets.ModelViewSet):
-    queryset = Project.objects.all()
     serializer_class = ProjectSerializer
     permission_classes = [IsAuthenticated]
+    
+    def get_queryset(self): # type: ignore[override]
+        return Project.objects.filter(owner=self.request.user)
     
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)

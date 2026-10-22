@@ -18,6 +18,17 @@ class TaskSerializer(serializers.ModelSerializer):
             "updated_at",
         )
         read_only_fields = ("id", "created_at", "updated_at")
+    
+    def validate(self, attrs):
+        request = self.context.get("request")
+        if request and request.method == "PATCH":
+            instance = self.instance
+            if instance and instance.project.owner != request.user:
+                if set(attrs) - {"status"}:
+                    raise serializers.ValidationError (
+                        "Assignee can only change task status"
+                    )
+        return attrs
 
 
 class CommentSerializer(serializers.ModelSerializer):
